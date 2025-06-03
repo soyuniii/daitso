@@ -1,60 +1,272 @@
-<!--
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
-</html>
--->
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %></title>
-  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="/stylesheets/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
 <body>
-<header>
-  <h1><%= title %></h1>
-  <nav>
-    <a href="/">홈</a>
-    <a href="/products">상품목록</a>
-    <a href="/cart">장바구니</a>
-    <a href="/board">고객센터</a> <!-- ✅ 추가 -->
-    <a href="/user/login">로그인</a>
-   
-  </nav>
-</header>
-
-<section class="banner">
-  <img src="/images/banner.jpg" alt="쇼핑몰 배너" style="width:100%; height:auto;">
-</section>
-
-<main>
-  <h2>🔥 인기 상품</h2>
-  <div class="product-grid">
-    <div class="product-card">
-      <img src="/images/product1.jpg" alt="상품1">
-      <p>상추 1kg</p>
-      <p><strong>₩3,500</strong></p>
+  <header>
+    <div class="header-container">
+      <a href="/" class="logo">SHOP<span>MALL</span></a>
+      
+      <nav>
+        <a href="/">홈</a>
+        <a href="/products">상품목록</a>
+        <a href="/cart">장바구니</a>
+        <a href="/board">고객센터</a>
+        <a href="/notice">공지사항</a>
+        <a href="/event">이벤트</a>
+      </nav>
+      
+      <div class="user-actions">
+        <% if (username) { %>
+          <span><%= username %>님</span>
+          <a href="/user/mypage"><i class="fas fa-user"></i></a>
+          <a href="/user/logout">로그아웃</a>
+        <% } else { %>
+          <a href="/user/login" class="login-btn">로그인</a>
+          <a href="/user/register">회원가입</a>
+        <% } %>
+      </div>
     </div>
-    <div class="product-card">
-      <img src="/images/product2.jpg" alt="상품2">
-      <p>깻잎 500g</p>
-      <p><strong>₩2,800</strong></p>
+  </header>
+
+  <section class="banner">
+    <img src="/images/banner.jpg" alt="쇼핑몰 배너">
+    <div class="banner-text">
+      <h2>신상품 특가 할인</h2>
+      <p>최대 50% 할인 혜택을 만나보세요</p>
     </div>
-    <!-- 필요시 반복 출력 -->
+  </section>
+
+  <div class="container">
+    <div class="categories">
+      <button class="category-btn active">전체상품</button>
+      <button class="category-btn">신상품</button>
+      <button class="category-btn">베스트</button>
+      <button class="category-btn">할인상품</button>
+      <button class="category-btn">과일</button>
+      <button class="category-btn">채소</button>
+      <button class="category-btn">정육</button>
+      <button class="category-btn">해산물</button>
+    </div>
+    
+    <h2 class="section-title">🔥 인기 상품</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-image">
+          <img src="/images/product1.jpg" alt="상추 1kg">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">상추 1kg</h3>
+          <p class="product-price">₩3,500</p>
+          <p class="product-desc">신선한 국내산 상추</p>
+          <div class="product-actions">
+            <button class="btn btn-outline">상세보기</button>
+            <button class="btn btn-primary">장바구니</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-image">
+          <img src="/images/product2.jpg" alt="깻잎 500g">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">깻잎 500g</h3>
+          <p class="product-price">₩2,800</p>
+          <p class="product-desc">향긋한 국내산 깻잎</p>
+          <div class="product-actions">
+            <button class="btn btn-outline">상세보기</button>
+            <button class="btn btn-primary">장바구니</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-image">
+          <img src="/images/product3.jpg" alt="사과 5kg">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">사과 5kg</h3>
+          <p class="product-price">₩15,900</p>
+          <p class="product-desc">달콤한 청송 사과</p>
+          <div class="product-actions">
+            <button class="btn btn-outline">상세보기</button>
+            <button class="btn btn-primary">장바구니</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-image">
+          <img src="/images/product4.jpg" alt="한우 등심 200g">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">한우 등심 200g</h3>
+          <p class="product-price">₩12,900</p>
+          <p class="product-desc">1++ 등급 한우</p>
+          <div class="product-actions">
+            <button class="btn btn-outline">상세보기</button>
+            <button class="btn btn-primary">장바구니</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <h2 class="section-title">🆕 신상품</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-image">
+          <img src="/images/product5.jpg" alt="방울토마토 500g">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">방울토마토 500g</h3>
+          <p class="product-price">₩5,900</p>
+          <p class="product-desc">달콤한 방울토마토</p>
+          <div class="product-actions">
+            <button class="btn btn-outline">상세보기</button>
+            <button class="btn btn-primary">장바구니</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-image">
+          <img src="/images/product6.jpg" alt="오렌지 2kg">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">오렌지 2kg</h3>
+          <p class="product-price">₩9,900</p>
+          <p class="product-desc">미국산 당도 높은 오렌지</p>
+          <div class="product-actions">
+            <button class="btn btn-outline">상세보기</button>
+            <button class="btn btn-primary">장바구니</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-image">
+          <img src="/images/product7.jpg" alt="삼겹살 300g">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">삼겹살 300g</h3>
+          <p class="product-price">₩7,900</p>
+          <p class="product-desc">신선한 국내산 돼지고기</p>
+          <div class="product-actions">
+            <button class="btn btn-outline">상세보기</button>
+            <button class="btn btn-primary">장바구니</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-image">
+          <img src="/images/product8.jpg" alt="고등어 2마리">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">고등어 2마리</h3>
+          <p class="product-price">₩6,500</p>
+          <p class="product-desc">부산항 직송 고등어</p>
+          <div class="product-actions">
+            <button class="btn btn-outline">상세보기</button>
+            <button class="btn btn-primary">장바구니</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</main>
 
-<footer>
-  <p>&copy; 2025 쇼핑몰 예시. All rights reserved.</p>
-</footer>
+  <footer>
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3>고객센터</h3>
+        <ul>
+          <li><a href="/board">공지사항</a></li>
+          <li><a href="/board">자주 묻는 질문</a></li>
+          <li><a href="/board">1:1 문의</a></li>
+          <li><a href="/board">상품 후기</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>회사정보</h3>
+        <ul>
+          <li><a href="#">회사 소개</a></li>
+          <li><a href="#">이용약관</a></li>
+          <li><a href="#">개인정보처리방침</a></li>
+          <li><a href="#">입점 문의</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>배송정보</h3>
+        <ul>
+          <li><a href="#">배송 안내</a></li>
+          <li><a href="#">교환/반품 안내</a></li>
+          <li><a href="#">결제 방법</a></li>
+          <li><a href="#">주문 조회</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>연락처</h3>
+        <ul>
+          <li>고객센터: 1234-5678</li>
+          <li>이메일: help@shopmall.com</li>
+          <li>운영시간: 평일 09:00 ~ 18:00</li>
+          <li>(점심시간 12:00 ~ 13:00)</li>
+        </ul>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>&copy; 2025 SHOPMALL. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // 카테고리 버튼 활성화
+    document.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.category-btn').forEach(b => {
+          b.classList.remove('active');
+        });
+        btn.classList.add('active');
+        // 여기에 카테고리별 상품 필터링 로직 추가 가능
+      });
+    });
+    
+    // 장바구니 버튼 클릭 이벤트
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+      if (btn.textContent === '장바구니') {
+        btn.addEventListener('click', () => {
+          alert('상품이 장바구니에 추가되었습니다.');
+          // 실제로는 AJAX 요청으로 서버에 장바구니 추가 요청
+        });
+      }
+    });
+    
+    // 상세보기 버튼 클릭 이벤트
+    document.querySelectorAll('.btn-outline').forEach(btn => {
+      if (btn.textContent === '상세보기') {
+        btn.addEventListener('click', () => {
+          // 상품 상세 페이지로 이동
+          window.location.href = '/products/1'; // 상품 ID에 따라 동적으로 변경 필요
+        });
+      }
+    });
+  </script>
 </body>
 </html>

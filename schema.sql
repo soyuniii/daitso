@@ -15,3 +15,30 @@ CREATE TABLE IF NOT EXISTS posts (
                                      author TEXT NOT NULL,
                                      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+-- 공지사항 테이블 (파일 업로드 기능 포함)
+CREATE TABLE IF NOT EXISTS notices (
+                                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                    title TEXT NOT NULL,
+                                    content TEXT NOT NULL,
+                                    file_path TEXT,
+                                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+-- 상품 테이블
+CREATE TABLE IF NOT EXISTS products (
+                                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                    name TEXT NOT NULL,
+                                    price INTEGER NOT NULL,
+                                    image_path TEXT,
+                                    description TEXT
+  );
+
+-- 장바구니 테이블
+CREATE TABLE IF NOT EXISTS cart (
+                                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                    user_id INTEGER NOT NULL,
+                                    product_id INTEGER NOT NULL,
+                                    quantity INTEGER DEFAULT 1,
+                                    FOREIGN KEY(user_id) REFERENCES users(id),
+                                    FOREIGN KEY(product_id) REFERENCES products(id)
+  );
