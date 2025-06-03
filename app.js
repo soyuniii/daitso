@@ -9,6 +9,7 @@ const boardRouter = require('./routes/board');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const userRouter = require('./routes/user');
+const productsRouter = require('./routes/products');
 
 var app = express();
 
@@ -31,6 +32,9 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/user',userRouter);
 app.use('/board', boardRouter);
+app.use('/products', productsRouter);
+
+
 app.get('/login', (req,res)=> {
   res.redirect('/user/login');
 });
