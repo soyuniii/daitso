@@ -33,12 +33,26 @@ CREATE TABLE IF NOT EXISTS products (
                                     description TEXT
   );
 
+-- 위시리스트 테이블
+CREATE TABLE IF NOT EXISTS wishlist (
+                                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                    user_id INTEGER NOT NULL,
+                                    product_id INTEGER NOT NULL,
+                                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                                    FOREIGN KEY(user_id) REFERENCES users(id),
+                                    FOREIGN KEY(product_id) REFERENCES products(id),
+                                    UNIQUE(user_id, product_id)
+);
+
 -- 장바구니 테이블
 CREATE TABLE IF NOT EXISTS cart (
                                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                                     user_id INTEGER NOT NULL,
                                     product_id INTEGER NOT NULL,
                                     quantity INTEGER DEFAULT 1,
+                                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                                     FOREIGN KEY(user_id) REFERENCES users(id),
-                                    FOREIGN KEY(product_id) REFERENCES products(id)
-  );
+                                    FOREIGN KEY(product_id) REFERENCES products(id),
+                                    UNIQUE(user_id, product_id)
+);

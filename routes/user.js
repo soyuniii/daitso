@@ -145,4 +145,43 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
+// routes/user.js - 위시리스트 관련 라우트 추가
+router.get('/mypage', (req, res) => {
+    if (!req.session.userId) {
+        return res.redirect('/user/login');
+    }
+  
+    db.all(`
+        SELECT w.id, p.* 
+        FROM wishlist w
+        JOIN products p ON w.product_id = p.id
+        WHERE w.user_id = ?
+    `, [req.session.userId], (err, wishlist) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('서버 오류');
+        }
+        res.render('user/mypage', { wishlist });
+    });
+  });
+  
+  router.delete('/wishlist/remove/:id', (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ success: false, message: '로그인이 필요합니다.' });
+    }
+  
+    db.run(
+        'DELETE FROM wishlist WHERE id = ? AND user_id = ?',
+        [req.params.id, req.session.userId],
+        function(err) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: '삭제 실패' });
+            }
+            res.json({ success: true, message: '삭제되었습니다.' });
+        }
+    );
+  });
+
+
 module.exports = router;

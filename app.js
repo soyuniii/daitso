@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const userRouter = require('./routes/user');
 const productsRouter = require('./routes/products');
+const cartRouter = require('./routes/cart');
 
 var app = express();
 
@@ -33,6 +34,7 @@ app.use('/users', usersRouter);
 app.use('/user',userRouter);
 app.use('/board', boardRouter);
 app.use('/products', productsRouter);
+app.use('/cart', cartRouter);
 
 
 app.get('/login', (req,res)=> {
