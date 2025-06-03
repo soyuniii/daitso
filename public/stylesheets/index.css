@@ -237,6 +237,17 @@ nav a:hover::after {
   background-color: var(--primary-color);
   color: white;
 }
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #3a56d4;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: large;
+  padding: 20px;
+  transition: var(--transition);
+}
 
 .categories {
   display: flex;
