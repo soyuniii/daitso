@@ -61,7 +61,7 @@
           <p class="product-desc">국내산 감자, 앙금, 찹쌀</p>
           <div class="product-actions">
             <a href="/products/1" class="btn btn-outline">상세보기</a>
-            <button class="btn btn-primary" data-id="1">장바구니</button>
+            <a href="/products/1" class="btn btn-primary" data-id="1">장바구니</a>
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@
           <p class="product-desc">국내산 고구마, 앙금, 찹쌀</p>
           <div class="product-actions">
             <a href="/products/2" class="btn btn-outline">상세보기</a>
-            <button class="btn btn-primary" data-id="2">장바구니</button>
+            <a href="/products/2" class="btn btn-primary" data-id="2">장바구니</a>
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@
           <p class="product-desc">국내산 밤, 앙금, 찹쌀</p>
           <div class="product-actions">
             <a href="/products/3" class="btn btn-outline">상세보기</a>
-            <button class="btn btn-primary" data-id="3">장바구니</button>
+            <a href="/products/3" class="btn btn-primary" data-id="3">장바구니</a>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@
           <p class="product-desc">강원도 미백 찰옥수수</p>
           <div class="product-actions">
             <a href="/products/4" class="btn btn-outline">상세보기</a>
-            <button class="btn btn-primary" data-id="4">장바구니</button>
+            <a href="/products/4" class="btn btn-primary" data-id="4">장바구니</a>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@
           <p class="product-desc">국내산 마늘, 치즈, 찹쌀</p>
           <div class="product-actions">
             <a href="/products/5" class="btn btn-outline">상세보기</a>
-            <button class="btn btn-primary" data-id="5">장바구니</button>
+            <a href="/products/5" class="btn btn-primary" data-id="5">장바구니</a>
           </div>
         </div>
       </div>
@@ -139,7 +139,7 @@
           <p class="product-desc">국내산 대파, 치즈, 찹쌀</p>
           <div class="product-actions">
             <a href="/products/6" class="btn btn-outline">상세보기</a>
-            <button class="btn btn-primary" data-id="6">장바구니</button>
+            <a href="/products/6" class="btn btn-primary" data-id="6">장바구니</a>
           </div>
         </div>
       </div>
@@ -154,7 +154,7 @@
           <p class="product-desc">강원도 미백 찰옥수수</p>
           <div class="product-actions">
             <a href="/products/4" class="btn btn-outline">상세보기</a>
-            <button class="btn btn-primary" data-id="4">장바구니</button>
+            <a href="/products/4" class="btn btn-primary" data-id="4">장바구니</a>
           </div>
         </div>
       </div>
@@ -214,39 +214,5 @@
       <p>&copy; 2025 SHOPMALL. All rights reserved.</p>
     </div>
   </footer>
-
-  <script>
-    // 카테고리 버튼 활성화
-    document.querySelectorAll('.category-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.category-btn').forEach(b => {
-          b.classList.remove('active');
-        });
-        btn.classList.add('active');
-        // 여기에 카테고리별 상품 필터링 로직 추가 가능
-      });
-    });
-    
-    // 장바구니 버튼 클릭 이벤트
-    document.querySelectorAll('.btn-primary').forEach(btn => {
-      if (btn.textContent === '장바구니') {
-        btn.addEventListener('click', () => {
-          alert('상품이 장바구니에 추가되었습니다.');
-          // 실제로는 AJAX 요청으로 서버에 장바구니 추가 요청
-        });
-      }
-    });
-    
-    // 상세보기 버튼 클릭 이벤트
-    document.querySelectorAll('.btn-outline').forEach(btn => {
-      if (btn.textContent === '상세보기') {
-        btn.addEventListener('click', () => {
-          // 상품 상세 페이지로 이동
-          window.location.href = '/products/1'; // 상품 ID에 따라 동적으로 변경 필요
-        });
-      }
-    });
-
-  </script>
 </body>
 </html>
