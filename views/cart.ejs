@@ -1,117 +1,128 @@
 <!-- views/cart.ejs -->
-<div class="cart-container">
-  <h2>장바구니</h2>
-  
-  <% if (cartItems.length > 0) { %>
-    <div class="cart-items">
-      <% cartItems.forEach(item => { %>
-        <div class="cart-item">
-          <img src="/images/product<%= item.product.id %>.png" alt="<%= item.product.name %>">
-          <div class="cart-item-info">
-            <h4><%= item.product.name %></h4>
-            <p><%= item.product.price.toLocaleString() %>원</p>
-            <div class="quantity-selector">
-              <button class="qty-btn minus" data-cart-id="<%= item.id %>">-</button>
-              <input type="number" value="<%= item.quantity %>" min="1" class="qty-input" data-cart-id="<%= item.id %>">
-              <button class="qty-btn plus" data-cart-id="<%= item.id %>">+</button>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/cart.css">
+</head>
+<body>
+    <div class="cart-container">
+        <h2>장바구니</h2>
+        
+        <% if (cartItems.length > 0) { %>
+          <div class="cart-items">
+            <% cartItems.forEach(item => { %>
+              <div class="cart-item">
+                <img src="/images/product<%= item.id %>.png" alt="<%= item.name %>">
+                <div class="cart-item-info">
+                  <h4><%= item.name %></h4>
+                  <p><%= item.price.toLocaleString() %>원</p>
+                  <div class="quantity-selector">
+                    <button class="qty-btn minus" data-cart-id="<%= item.id %>">-</button>
+                    <input type="number" value="<%= item.quantity %>" min="1" class="qty-input" data-cart-id="<%= item.id %>">
+                    <button class="qty-btn plus" data-cart-id="<%= item.id %>">+</button>
+                  </div>
+                </div>
+                <button class="btn btn-remove-cart" data-cart-id="<%= item.id %>">삭제</button>
+              </div>
+            <% }); %>
           </div>
-          <button class="btn btn-remove-cart" data-cart-id="<%= item.id %>">삭제</button>
-        </div>
-      <% }); %>
-    </div>
-    
-    <div class="cart-summary">
-      <h3>주문 요약</h3>
-      <div class="summary-row">
-        <span>상품 금액</span>
-        <span><%= totalPrice.toLocaleString() %>원</span>
+          
+          <div class="cart-summary">
+            <h3>주문 요약</h3>
+            <div class="summary-row">
+              <span>상품 금액</span>
+              <span><%= totalPrice.toLocaleString() %>원</span>
+            </div>
+            <div class="summary-row">
+              <span>배송비</span>
+              <span><%= shippingFee === 0 ? '무료' : shippingFee.toLocaleString() + '원' %></span>
+            </div>
+            <div class="summary-row total">
+              <span>총 결제 금액</span>
+              <span><%= (totalPrice + shippingFee).toLocaleString() %>원</span>
+            </div>
+            <button class="btn btn-order">주문하기</button>
+          </div>
+        <% } else { %>
+          <p class="empty-message">장바구니에 담긴 상품이 없습니다.</p>
+          <a href="/products" class="btn btn-shopping">쇼핑 계속하기</a>
+        <% } %>
       </div>
-      <div class="summary-row">
-        <span>배송비</span>
-        <span><%= shippingFee === 0 ? '무료' : shippingFee.toLocaleString() + '원' %></span>
-      </div>
-      <div class="summary-row total">
-        <span>총 결제 금액</span>
-        <span><%= (totalPrice + shippingFee).toLocaleString() %>원</span>
-      </div>
-      <button class="btn btn-order">주문하기</button>
-    </div>
-  <% } else { %>
-    <p class="empty-message">장바구니에 담긴 상품이 없습니다.</p>
-    <a href="/products" class="btn btn-shopping">쇼핑 계속하기</a>
-  <% } %>
-</div>
-
-<script>
-  // 수량 변경
-  document.querySelectorAll('.qty-btn').forEach(btn => {
-    btn.addEventListener('click', async function() {
-      const cartId = this.getAttribute('data-cart-id');
-      const input = document.querySelector(`.qty-input[data-cart-id="${cartId}"]`);
-      let newQuantity = parseInt(input.value);
       
-      if (this.classList.contains('minus') && newQuantity > 1) {
-        newQuantity--;
-      } else if (this.classList.contains('plus')) {
-        newQuantity++;
-      }
-      
-      try {
-        const response = await fetch(`/cart/update/${cartId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            quantity: newQuantity
-          })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-          input.value = newQuantity;
-          location.reload(); // 가격 재계산을 위해 페이지 새로고침
-        } else {
-          alert(result.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('오류가 발생했습니다. 다시 시도해주세요.');
-      }
-    });
-  });
-
-  // 장바구니 아이템 삭제
-  document.querySelectorAll('.btn-remove-cart').forEach(btn => {
-    btn.addEventListener('click', async function() {
-      const cartId = this.getAttribute('data-cart-id');
-      
-      if (confirm('정말 삭제하시겠습니까?')) {
-        try {
-          const response = await fetch(`/cart/remove/${cartId}`, {
-            method: 'DELETE'
+      <script>
+        // 수량 변경
+        document.querySelectorAll('.qty-btn').forEach(btn => {
+          btn.addEventListener('click', async function() {
+            const cartId = this.getAttribute('data-cart-id');
+            const input = document.querySelector(`.qty-input[data-cart-id="${cartId}"]`);
+            let newQuantity = parseInt(input.value);
+            
+            if (this.classList.contains('minus') && newQuantity > 1) {
+              newQuantity--;
+            } else if (this.classList.contains('plus')) {
+              newQuantity++;
+            }
+            
+            try {
+              const response = await fetch(`/cart/update/${cartId}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  quantity: newQuantity
+                })
+              });
+              
+              const result = await response.json();
+              
+              if (result.success) {
+                input.value = newQuantity;
+                location.reload(); // 가격 재계산을 위해 페이지 새로고침
+              } else {
+                alert(result.message);
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              alert('오류가 발생했습니다. 다시 시도해주세요.');
+            }
           });
-          
-          const result = await response.json();
-          
-          if (result.success) {
-            alert('장바구니에서 삭제되었습니다.');
-            location.reload();
-          } else {
-            alert(result.message);
-          }
-        } catch (error) {
-          console.error('Error:', error);
-          alert('오류가 발생했습니다. 다시 시도해주세요.');
-        }
-      }
-    });
-  });
-
-  // 주문하기
-  document.querySelector('.btn-order')?.addEventListener('click', () => {
-    alert('주문/배송 정보 입력 페이지로 이동합니다');
-  });
-</script>
+        });
+      
+        // 장바구니 아이템 삭제
+        document.querySelectorAll('.btn-remove-cart').forEach(btn => {
+          btn.addEventListener('click', async function() {
+            const cartId = this.getAttribute('data-cart-id');
+            
+            if (confirm('정말 삭제하시겠습니까?')) {
+              try {
+                const response = await fetch(`/cart/remove/${cartId}`, {
+                  method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                  alert('장바구니에서 삭제되었습니다.');
+                  location.reload();
+                } else {
+                  alert(result.message);
+                }
+              } catch (error) {
+                console.error('Error:', error);
+                alert('오류가 발생했습니다. 다시 시도해주세요.');
+              }
+            }
+          });
+        });
+      
+        // 주문하기
+        document.querySelector('.btn-order')?.addEventListener('click', () => {
+          alert('주문/배송 정보 입력 페이지로 이동합니다');
+        });
+      </script>
+</body>
+</html>

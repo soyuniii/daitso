@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
     if (!req.session.userId) {
         return res.redirect('/user/login');
     }
+    console.log('현재 세션 userId:', req.session.userId);
 
     db.all(`
         SELECT c.id, c.quantity, p.* 
@@ -23,6 +24,7 @@ router.get('/', (req, res) => {
             console.error(err);
             return res.status(500).send('서버 오류');
         }
+        console.log('가져온 장바구니:', cartItems);
 
         const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const shippingFee = totalPrice > 30000 ? 0 : 2500; // 3만원 이상 구매 시 무료 배송 예시
