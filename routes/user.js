@@ -161,7 +161,7 @@ router.get('/mypage', (req, res) => {
             console.error(err);
             return res.status(500).send('서버 오류');
         }
-        res.render('user/mypage', { wishlist });
+        res.render('mypage', { wishlist });
     });
   });
   
@@ -171,7 +171,7 @@ router.get('/mypage', (req, res) => {
     }
   
     db.run(
-        'DELETE FROM wishlist WHERE id = ? AND user_id = ?',
+        'DELETE FROM wishlist WHERE product_id = ? AND user_id = ?',
         [req.params.id, req.session.userId],
         function(err) {
             if (err) {

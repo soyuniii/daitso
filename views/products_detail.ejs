@@ -97,11 +97,6 @@
       });
     });
 
-    // 버튼 클릭 이벤트
-    document.querySelector('.btn-wishlist').addEventListener('click', () => {
-      alert('위시리스트에 추가되었습니다.');
-    });
-
     document.querySelector('.btn-cart').addEventListener('click', () => {
       const quantity = document.querySelector('.qty-input').value;
       alert(`${quantity}개 상품이 장바구니에 추가되었습니다.`);
@@ -111,7 +106,7 @@
   // 위시리스트 추가
   document.querySelector('.btn-wishlist').addEventListener('click', async () => {
     try {
-      const response = await fetch('/users/wishlist/add', {
+      const response = await fetch('/products/wishlist/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

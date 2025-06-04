@@ -1,90 +1,102 @@
 <!-- views/user/mypage.ejs -->
-<div class="mypage-container">
-  <h2>마이페이지</h2>
-  
-  <div class="mypage-nav">
-    <a href="/user/mypage" class="active">위시리스트</a>
-    <a href="/user/mypage/orders">주문내역</a>
-    <a href="/user/mypage/settings">설정</a>
-  </div>
-  
-  <div class="wishlist-section">
-    <h3>위시리스트</h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이페이지</title>
+  <link rel="stylesheet" href="/stylesheets/mypage.css">
+</head>
+<body>
+  <div class="mypage-container">
+    <h2>마이페이지</h2>
     
-    <% if (wishlist.length > 0) { %>
-      <div class="wishlist-grid">
-        <% wishlist.forEach(item => { %>
-          <div class="wishlist-item">
-            <img src="/images/product<%= item.product.id %>.png" alt="<%= item.product.name %>">
-            <h4><%= item.product.name %></h4>
-            <p><%= item.product.price.toLocaleString() %>원</p>
-            <button class="btn btn-move-cart" data-product-id="<%= item.product.id %>">장바구니에 추가</button>
-            <button class="btn btn-remove-wishlist" data-wishlist-id="<%= item.id %>">삭제</button>
-          </div>
-        <% }); %>
-      </div>
-    <% } else { %>
-      <p class="empty-message">위시리스트에 담긴 상품이 없습니다.</p>
-    <% } %>
+    <div class="mypage-nav">
+      <a href="/user/mypage" class="active">위시리스트</a>
+      <a href="/user/mypage/orders">주문내역</a>
+      <a href="/user/mypage/settings">설정</a>
+    </div>
+    
+    <div class="wishlist-section">
+      <h3>위시리스트</h3>
+      
+      <% if (wishlist.length > 0) { %>
+        <div class="wishlist-grid">
+          <% wishlist.forEach(item => { %>
+            <div class="wishlist-item">
+              <img src="/images/product<%= item.id %>.png" alt="<%= item.name %>">
+              <h4><%= item.name %></h4>
+              <p><%= item.price.toLocaleString() %>원</p>
+              <button class="btn btn-move-cart" data-product-id="<%= item.id %>">장바구니에 추가</button>
+              <button class="btn btn-remove-wishlist" data-wishlist-id="<%= item.id %>">삭제</button>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <p class="empty-message">위시리스트에 담긴 상품이 없습니다.</p>
+      <% } %>
+    </div>
   </div>
-</div>
-
-<script>
-  // 위시리스트 아이템 삭제
-  document.querySelectorAll('.btn-remove-wishlist').forEach(btn => {
-    btn.addEventListener('click', async function() {
-      const wishlistId = this.getAttribute('data-wishlist-id');
-      
-      try {
-        const response = await fetch(`/user/wishlist/remove/${wishlistId}`, {
-          method: 'DELETE'
-        });
+  
+  <script>
+    // 위시리스트 아이템 삭제
+    document.querySelectorAll('.btn-remove-wishlist').forEach(btn => {
+      btn.addEventListener('click', async function() {
+        const wishlistId = this.getAttribute('data-wishlist-id');
         
-        const result = await response.json();
-        
-        if (result.success) {
-          alert('위시리스트에서 삭제되었습니다.');
-          location.reload();
-        } else {
-          alert(result.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('오류가 발생했습니다. 다시 시도해주세요.');
-      }
-    });
-  });
-
-  // 장바구니로 이동
-  document.querySelectorAll('.btn-move-cart').forEach(btn => {
-    btn.addEventListener('click', async function() {
-      const productId = this.getAttribute('data-product-id');
-      
-      try {
-        const response = await fetch('/products/cart/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            productId: productId,
-            quantity: 1
-          })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-          if (confirm('장바구니에 추가되었습니다. 장바구니 페이지로 이동하시겠습니까?')) {
-            window.location.href = '/cart';
+        try {
+          const response = await fetch(`/user/wishlist/remove/${wishlistId}`, {
+            method: 'DELETE'
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            alert('위시리스트에서 삭제되었습니다.');
+            location.reload();
+          } else {
+            alert(result.message);
           }
-        } else {
-          alert(result.message);
+        } catch (error) {
+          console.error('Error:', error);
+          alert('오류가 발생했습니다. 다시 시도해주세요.');
         }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('오류가 발생했습니다. 다시 시도해주세요.');
-      }
+      });
     });
-  });
-</script>
+  
+    // 장바구니로 이동
+    document.querySelectorAll('.btn-move-cart').forEach(btn => {
+      btn.addEventListener('click', async function() {
+        const productId = this.getAttribute('data-product-id');
+        
+        try {
+          const response = await fetch('/products/cart/add', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              productId: productId,
+              quantity: 1
+            })
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            if (confirm('장바구니에 추가되었습니다. 장바구니 페이지로 이동하시겠습니까?')) {
+              window.location.href = '/cart';
+            }
+          } else {
+            alert(result.message);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('오류가 발생했습니다. 다시 시도해주세요.');
+        }
+      });
+    });
+  </script>
+  
+</body>
+</html>
