@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="form-group">
+        <label for="attachment">첨부파일</label>
+        <input type="file" id="attachment" name="attachment" class="file-input">
+        <% if (post && post.file_path) { %>
+          <div class="attachment">
+            <i class="fas fa-paperclip"></i>
+            <a href="/uploads/<%= post.file_path.split('/').pop() %>" download>
+              <%= post.file_path.split('/').pop() %>
+            </a>
+          </div>
+        <% } %>
+      </div>
+</body>
+</html>

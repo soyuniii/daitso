@@ -36,20 +36,6 @@ router.get('/new', (req, res) => {
     res.render('post', {post: null, parentId: null });
 });
 
-// 글쓰기 처리
-// router.post('/new', (req, res) => {
-//     const { title, content, parent_id } = req.body;
-//     const author = req.session.user?.username || '익명';
-//
-//     db.run(
-//         'INSERT INTO posts (title, content, parent_id, author) VALUES (?, ?, ?, ?)',
-//         [title, content, parent_id || null, author],
-//         function (err) {
-//             if (err) return res.send('작성 실패');
-//             res.redirect('/board');
-//         }
-//     );
-// });
 
 //글쓰기 처리 + 파일 업로드
 
@@ -118,13 +104,14 @@ router.get('/reply/:id', (req, res) => {
     const parentId = req.params.id;
     db.get("SELECT title FROM posts WHERE id = ?", [parentId], (err, row) => {
         if (err || !row) return res.send("원글 없음");
-        res.render('reply', { parentId, parentTitle: row.title });
+        res.render('post', { post: null, parentId, parentTitle: row.title, session: req.session });
     });
 });
 
 // 댓글 달기 post
 router.post('/create', (req, res) => {
     const { author, title, content, parent_id } = req.body;
+    console.log('답글 데이터:', { author, title, content, parent_id });
     db.run(
         'INSERT INTO posts (author, title, content, parent_id) VALUES (?, ?, ?, ?)',
         [author, title, content, parent_id || null],
@@ -140,13 +127,14 @@ router.post('/create', (req, res) => {
 router.get('/edit/:id', (req, res) => {
     db.get('SELECT * FROM posts WHERE id = ?', [req.params.id], (err, post) => {
         if (err || !post) return res.send('글 없음');
-        res.render('post', { post });
+        res.render('post',{ post })
     });
 });
 
 // 수정 처리
-router.post('/edit/:id', (req, res) => {
+router.post('/edit/:id', upload.single('attachment'), (req, res) => {
     const { title, content } = req.body;
+    //const postId = req.params.id;
     db.run(
         'UPDATE posts SET title = ?, content = ? WHERE id = ?',
         [title, content, req.params.id],

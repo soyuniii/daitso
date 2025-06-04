@@ -1,75 +1,49 @@
-<!--
-<h2>고객센터 게시판</h2>
-<a href="/board/new">[글쓰기]</a>
-<ul>
-  <% posts.forEach(post => { %>
-    <li style="margin-left:<%= post.parent_id ? '30px' : '0' %>">
-      <a href="/board/view/<%= post.id %>">
-        <%= post.parent_id ? '[답글]' : '' %> <%= post.title %> - <%= post.author %>
-      </a>
-      (<a href="/board/edit/<%= post.id %>">수정</a> / <a href="/board/delete/<%= post.id %>">삭제</a>)
-    </li>
-  <% }) %>
-</ul>
--->
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>고객센터 게시판</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-    }
-    h2 {
-      color: #333;
-    }
-    a {
-      text-decoration: none;
-      color: #007BFF;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      margin: 10px 0;
-    }
-  </style>
+  <link rel="stylesheet" href="/stylesheets/board.css">
 </head>
 <body>
+  <div class="board-container">
+    <header class="board-header">
+      <h1 class="board-title">고객센터 게시판</h1>
+      <nav class="board-nav">
+        <a href="/">홈</a>
+        <a href="/board/new">글쓰기</a>
+      </nav>
+    </header>
 
-  <header>
-    <h2>고객센터 게시판</h2>
-    <nav>
-      <a href="/">홈</a> |
-      <a href="/board/new">[글쓰기]</a>
-    </nav>
-  </header>
-
-  <main>
-    <ul>
-      <% posts.forEach(post => { %>
-        <li style="margin-left:<%= post.parent_id ? '30px' : '0' %>">
-          <a href="/board/view/<%= post.id %>">
-            <%= post ? '글 수정': post.parent_id ? '[답글]' : '' %> <%= post.title %> - <%= post.author %>
-          </a>
-          (<a href="/board/edit/<%= post.id %>">수정</a> /
-           <a href="/board/delete/<%= post.id %>">삭제</a>)
-        </li>
-      <% }) %>
-    </ul>
-  </main>
-
-  <footer style="margin-top: 40px; color: #aaa; font-size: 0.9em;">
-    &copy; 2025 고객센터 시스템
-  </footer>
-
+    <main>
+      <ul class="post-list">
+        <% posts.forEach(post => { %>
+          <li class="post-item <%= post.parent_id ? 'reply' : '' %>">
+            <h3 class="post-title">
+              <a href="/board/view/<%= post.id %>">
+                <%= post.parent_id ? '[답글] ' : '' %><%= post.title %>
+              </a>
+            </h3>
+            <div class="post-meta">
+              <span>작성자: <%= post.author %></span>
+              <span>작성일: <%= new Date(post.created_at).toLocaleString() %></span>
+              <% if (post.updated_at) { %>
+                <span>수정일: <%= new Date(post.updated_at).toLocaleString() %></span>
+              <% } %>
+            </div>
+            <div class="post-actions">
+              <a href="/board/edit/<%= post.id %>">수정</a>
+              <a href="/board/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+    </main>
+    <footer style="margin-top: 40px; color: #aaa; font-size: 0.9em;">
+      &copy; 2025 고객센터 시스템
+    </footer>
+  
+  </div>
 </body>
 </html>
