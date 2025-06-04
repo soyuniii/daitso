@@ -63,6 +63,7 @@ router.post('/register', async (req, res) => {
                     // 회원가입 성공 시 로그인 처리
                     req.session.userId = this.lastID;
                     req.session.username = username;
+                    req.session.name = name;
                     return res.render('register', {
                         message: '회원가입이 완료되었습니다! 자동으로 로그인되었습니다.',
                         messageType: 'success'
