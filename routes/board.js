@@ -33,7 +33,7 @@ router.get('/', (req, res) => {
 
 // 글쓰기 폼
 router.get('/new', (req, res) => {
-    res.render('post', {post: null, parentId: null });
+    res.render('post', {post: null, parentId: null ,parentTitle: null, session: req.session});
 });
 
 
@@ -92,14 +92,6 @@ router.get('/view/:id', (req, res) => {
     });
 });
 
-
-// 답글 달기 폼
-//
-// router.get('/reply/:id', (req, res) => {
-//     const parentId = req.params.id;
-//     res.render('post', {post: null, parentId });
-// });
-
 router.get('/reply/:id', (req, res) => {
     const parentId = req.params.id;
     db.get("SELECT title FROM posts WHERE id = ?", [parentId], (err, row) => {
@@ -111,7 +103,6 @@ router.get('/reply/:id', (req, res) => {
 // 댓글 달기 post
 router.post('/create', (req, res) => {
     const { author, title, content, parent_id } = req.body;
-    console.log('답글 데이터:', { author, title, content, parent_id });
     db.run(
         'INSERT INTO posts (author, title, content, parent_id) VALUES (?, ?, ?, ?)',
         [author, title, content, parent_id || null],
@@ -127,7 +118,7 @@ router.post('/create', (req, res) => {
 router.get('/edit/:id', (req, res) => {
     db.get('SELECT * FROM posts WHERE id = ?', [req.params.id], (err, post) => {
         if (err || !post) return res.send('글 없음');
-        res.render('post',{ post })
+        res.render('post',{ post ,session: req.session})
     });
 });
 
