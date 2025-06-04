@@ -117,7 +117,7 @@ router.post('/login', async (req, res) => {
             const match = await bcrypt.compare(password, user.password);
             if (match) {
                 req.session.userId = user.id;
-                req.session.username = user.username;
+                req.session.name = user.name;
                 return res.render('login', {
                     message: '로그인 성공! 잠시 후 홈으로 이동합니다.',
                     messageType: 'success'

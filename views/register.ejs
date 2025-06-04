@@ -5,34 +5,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
+    <link rel="stylesheet" href="/stylesheets/index.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #EDE8E4;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; /* 화면 높이만큼 꽉 채워서 중앙정렬 가능하게 */
-            margin: 0; /* 기본 마진 제거 */
-
-        }
         h1 {
             color: #333;
-            padding: 10px;
+            padding: 15px;
         }
         form {
-            width: 300px; /* 가로 넓이 크게 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 500px;
+            margin: 50px auto;
         }
-        input {
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
             width: 100%;
-            padding: 15px;
-            margin: 8px 0;
+            padding: 20px;
+            margin: 2px 0;
             box-sizing: border-box;
-            border-radius: 10px;
+            border-radius: 5px;
             border-style: none;
+            font-size: 18px;
         }
+
+        .gender-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin: 5px 0;
+            font-size: 20px;
+        }
+
+        .gender-container label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .checkbox-container {
+            width: 100%;
+            font-size: 18px;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         button {
             width: 100%;
             background-color: #4CAF50;
@@ -41,24 +65,71 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 20px;
             margin-top: 10px;
         }
+
         button:hover {
             background-color: #45a049;
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="header-container">
+          <div class="user-actions">
+              <a href="/user/login" class="login-btn">로그인</a>
+              <a href="/user/register">회원가입</a>
+          </div>
+    
+          <a href="/" class="logo">내고향</a>
+          
+          <nav>
+            <a href="/">홈</a>
+            <a href="/products">상품목록</a>
+            <a href="/cart">장바구니</a>
+            <a href="/board">고객센터</a>
+            <a href="/notice">공지사항</a>
+            <a href="/event">이벤트</a>
+          </nav>
+          
+          
+        </div>
+      </header>
 
-    <h1>회원가입</h1>
 
-    <form action="/user/register" method="post">
-        <input type="text" name="username" placeholder="아이디" required><br>
-        <input type="text" name="name" placeholder="이름" required><br>
-        <input type="password" name="password" placeholder="비밀번호" required><br>
+      <form action="/user/register" method="post">
+        <h1>회원가입</h1>
+
+        <input type="text" name="name" placeholder="이름 *" required><br>
+        <input type="text" name="username" placeholder="아이디 *" required><br>
+        <input type="password" name="password" placeholder="비밀번호 *" required><br>
+        <input type="password" name="confirm_password" placeholder="비밀번호 확인 *" required><br>
+        <input type="tel" name="phone" placeholder="연락처 *" required><br>
+    
+        <div class="gender-container">
+            <label><input type="radio" name="gender" value="male"> 남성</label>
+            <label><input type="radio" name="gender" value="female"> 여성</label>
+        </div>
+    
+        <label class="checkbox-container">
+            <input type="checkbox" name="agreement" required>
+            개인정보 활용에 동의합니다. *
+        </label>
+    
         <button type="submit">가입하기</button>
     </form>
+
+    <script>
+        <% if (typeof message !== 'undefined' && message) { %>
+          alert("<%= message %>");
+          <% if (messageType === 'success' && message.includes('회원가입')) { %>
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 1000); // 회원가입 성공 시 홈으로 이동
+          <% } %>
+        <% } %>
+      </script>
 
     
 

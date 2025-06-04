@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { 
     title: '내고향',
-    username: req.session.username  });
+    name: req.session.name  });
 });
 
 module.exports = router;
