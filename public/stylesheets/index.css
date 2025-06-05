@@ -274,7 +274,7 @@ nav a:hover::after {
 }
 
 footer {
-  background-color: var(--dark-color);
+  background-color: #6B2D41;
   color: white;
   padding: 2rem 0;
   margin-top: 3rem;

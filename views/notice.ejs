@@ -3,20 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>공지사항</title>
+    <link rel="stylesheet" href="/stylesheets/board.css">
 </head>
 <body>
-    <div class="form-group">
-        <label for="attachment">첨부파일</label>
-        <input type="file" id="attachment" name="attachment" class="file-input">
-        <% if (post && post.file_path) { %>
-          <div class="attachment">
-            <i class="fas fa-paperclip"></i>
-            <a href="/uploads/<%= post.file_path.split('/').pop() %>" download>
-              <%= post.file_path.split('/').pop() %>
-            </a>
-          </div>
-        <% } %>
-      </div>
+   <div class="board-container">
+    <div class="header-container">
+      <a href="/" class="logo">내고향</a>
+    </div>
+    <header class="board-header">
+      <h1 class="board-title">공지사항</h1>
+      <nav class="board-nav">
+        <a href="/notice/new">글쓰기</a>
+        <a href="/">홈</a>
+      </nav>
+    </header>
+
+    <main>
+      <ul class="post-list">
+        <% posts.forEach(post => { %>
+          <li class="post-item">
+            <h3 class="post-title">
+              <a href="/notice/view/<%= post.id %>">
+                <%= post.title %>
+              </a>
+            </h3>
+            <div class="post-meta">
+              <span>작성일: <%= new Date(post.created_at).toLocaleString() %></span>
+              <% if (post.updated_at) { %>
+                <span>수정일: <%= new Date(post.updated_at).toLocaleString() %></span>
+              <% } %>
+            </div>
+            <% if (post.file_path) { %>
+              <span class="file-flag">📎 첨부파일</span>
+            <% } %>
+          
+            <div class="post-actions">
+              <a href="/notice/edit/<%= post.id %>">수정</a>
+              <a href="/notice/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+    </main>
+    <footer style="margin-top: 40px; color: #aaa; font-size: 0.9em;">
+      &copy; 2025 공지사항
+    </footer>
 </body>
 </html>

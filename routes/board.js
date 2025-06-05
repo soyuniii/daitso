@@ -87,7 +87,7 @@ router.get('/view/:id', (req, res) => {
         if (err || !post) return res.send('글 없음');
 
         db.all('SELECT * FROM files WHERE post_id = ?', [postId], (ferr, files) => {
-            res.render('detail', { post, files:[] });
+            res.render('detail', { post, files:[], isNotice: false });
         });
     });
 });

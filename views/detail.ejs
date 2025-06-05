@@ -12,14 +12,29 @@
       <h2 class="form-title"><%= post.title %></h2>
         <div class="form-group">
           <p><%= post.content %></p>
-          <p>작성자: <%= post.author %> | 작성일: <%= post.created_at %></p>
+          <p>| 작성일: <%= post.created_at %></p>
+          <% if (!isNotice) { %>
+            <p>| 작성자: <%= post.author %></p>
+          <% } %>
         </div>
-        
+        <% if (post.file_path) { %>
+          <span class="file-flag">📎 첨부파일</span>
+          <a href="<%= post.file_path %>" download>
+            <%= post.file_path.split('/').pop() %>
+          </a>
+        <% } %>
+   
         <div class="form-actions">
-          <a href="/board/reply/<%= post.id %>">답글</a>
-          <a href="/board/edit/<%= post.id %>">수정</a>
-          <a href="/board/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
-          <a href="/board">목록으로</a>
+          <% if (!isNotice) { %>
+            <a href="/board/reply/<%= post.id %>">답글</a>
+            <a href="/board/edit/<%= post.id %>">수정</a>
+            <a href="/board/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+            <a href="/board">목록으로</a>
+          <% } else { %>
+            <a href="/notice/edit/<%= post.id %>">수정</a>
+            <a href="/notice/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+            <a href="/notice">목록으로</a>
+          <% } %>
         </div>
       </form>
     </div>
