@@ -29,7 +29,6 @@ const upload = multer({ storage: storage });
 
 
 // 게시글 목록
-// 게시글 목록
 router.get('/', (req, res) => {
     db.all(`
         SELECT id, title, content, file_path, created_at
