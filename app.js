@@ -12,6 +12,7 @@ const userRouter = require('./routes/user');
 const productsRouter = require('./routes/products');
 const cartRouter = require('./routes/cart');
 const noticeRouter = require('./routes/notice');
+const devRouter = require('./routes/dev');
 
 var app = express();
 
@@ -37,6 +38,7 @@ app.use('/board', boardRouter);
 app.use('/products', productsRouter);
 app.use('/cart', cartRouter);
 app.use('/notice', noticeRouter);
+app.use('/dev', devRouter);
 
 
 app.get('/login', (req,res)=> {
