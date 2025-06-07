@@ -22,7 +22,6 @@ const upload = multer({ storage: storage });
 
 // 게시글 목록
 router.get('/', (req, res) => {
-    console.log('세션 username:', req.session.username);
     db.all(`
         SELECT * FROM posts ORDER BY 
         COALESCE(parent_id, id), id ASC

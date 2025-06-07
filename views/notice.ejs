@@ -28,7 +28,11 @@
                 <%= post.title %>
               </a>
             </h3>
+            <% const isAuthor = username === post.author; %>
+            <% const isAdmin = username === 'admin'; %>
+            <% const isAnon = post.author === '익명'; %>
             <div class="post-meta">
+              <span>작성자: <%= post.author || '익명' %></span>
               <span>작성일: <%= new Date(post.created_at).toLocaleString() %></span>
               <% if (post.updated_at) { %>
                 <span>수정일: <%= new Date(post.updated_at).toLocaleString() %></span>
@@ -39,9 +43,17 @@
             <% } %>
           
             <div class="post-actions">
+            <% if (isAuthor) { %>
               <a href="/notice/edit/<%= post.id %>">수정</a>
-              <a href="/notice/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
-            </div>
+            <% } else { %>
+              <span class="disabled">수정</span>
+            <% } %>
+            <% if ((isAuthor) || (isAnon && isAdmin)) { %>
+              <a href="/notice/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+            <% } else { %>
+              <span class="disabled">삭제</span>
+            <% } %>
+          </div>
           </li>
         <% }) %>
       </ul>

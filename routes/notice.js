@@ -31,18 +31,20 @@ const upload = multer({ storage: storage });
 // 게시글 목록
 router.get('/', (req, res) => {
     db.all(`
-        SELECT id, title, content, file_path, created_at
+        SELECT id, title, author, content, file_path, created_at
         FROM notices
         ORDER BY created_at DESC
     `, [], (err, posts) => {
+        const username = req.session.username;
         if (err) return res.send('목록 불러오기 실패');
-        res.render('notice', { title: '공지사항', posts });
+        if (!username) return res.redirect('/login');
+        res.render('notice', { title: '공지사항', posts, username });
     });
 });
 
 // 글쓰기 폼 수정
 router.get('/new', (req, res) => {
-    res.render('post_notice', { post: null, session: req.session });
+    res.render('post_notice', { post: null, session: req.session, username: req.session.username || null });
 });
 
 
@@ -50,10 +52,11 @@ router.get('/new', (req, res) => {
 router.post('/new', upload.single('attachment'), (req, res) => {
     const { title, content } = req.body;
     const filePath = req.file ? `/uploads/${req.file.filename}` : null;
+    const author = req.session.username || '익명';
 
     db.run(
-        'INSERT INTO notices (title, content, file_path, created_at) VALUES (?, ?, ?, datetime("now"))',
-        [title, content, filePath],
+        'INSERT INTO notices (author, title, content, file_path, created_at) VALUES (?, ?, ?, ?, datetime("now"))',
+        [author, title, content, filePath],
         function (err) {
             if (err) {
                 if (req.file) {
@@ -77,7 +80,7 @@ router.get('/view/:id', (req, res) => {
         if (err || !post) return res.send('글 없음');
 
         db.all('SELECT * FROM files WHERE post_id = ?', [postId], (ferr, files) => {
-            res.render('detail', { post, files, isNotice: true });
+            res.render('detail', { post, files, isNotice: true, username: req.session.username || null });
         });
     });
 });
@@ -87,7 +90,7 @@ router.get('/view/:id', (req, res) => {
 router.get('/edit/:id', (req, res) => {
     db.get('SELECT * FROM notices WHERE id = ?', [req.params.id], (err, post) => {
         if (err || !post) return res.send('글 없음');
-        res.render('post_notice',{ post ,session: req.session})
+        res.render('post_notice',{ post ,session: req.session, username: req.session.username || null})
     });
 });
 
@@ -122,21 +125,34 @@ router.post('/edit/:id', upload.single('attachment'), (req, res) => {
 // 삭제
 router.get('/delete/:id', (req, res) => {
     const postId = req.params.id;
+    const currentUser = req.session.username;
 
     // 먼저 파일 경로 확인
-    db.get('SELECT file_path FROM notices WHERE id = ?', [postId], (err, row) => {
+    db.get('SELECT file_path, author FROM notices WHERE id = ?', [postId], (err, post) => {
         if (err) {
             console.error('파일 경로 조회 실패:', err);
             return res.send('삭제 실패');
         }
 
+        const isAnon = post.author === '익명';
+        const isAdmin = currentUser === 'admin';
+        const isAuthor = currentUser && (currentUser.trim() === post.author.trim());
+
+        if (isAnon) {
+            if (!isAdmin) return res.send('익명 글은 admin만 삭제할 수 있습니다.');
+        } else {
+            if (!isAuthor) return res.send('본인이 작성한 글만 삭제할 수 있습니다.');
+        }
+
+
         // 파일 경로가 있다면 실제 파일 삭제
-        if (row?.file_path) {
-            const fileToDelete = path.join(__dirname, '../public', row.file_path);
+        if (post?.file_path) {
+            const fileToDelete = path.join(__dirname, '../public', post.file_path);
             if (fs.existsSync(fileToDelete)) {
                 fs.unlinkSync(fileToDelete);
             }
         }
+        
 
         // 그 다음 DB에서 삭제
         db.run('DELETE FROM notices WHERE id = ?', [postId], (err) => {
