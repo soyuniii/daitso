@@ -79,7 +79,7 @@
   }
   
   .post-item {
-    padding: 1.5rem;
+    padding: 1rem;
     margin-bottom: 1rem;
     background-color: var(--light-color);
     border-radius: var(--border-radius);
@@ -93,7 +93,7 @@
   
   .post-item.reply {
     margin-left: 3rem;
-    border-left: 3px solid var(--primary-color);
+    border-left: 5px solid var(--primary-color);
     background-color: #f9f9f9;
   }
   
@@ -130,7 +130,8 @@
   .post-actions a {
     text-decoration: none;
     color: #666;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    margin-top: 8px;
   }
   
   .post-actions a:hover {
@@ -147,8 +148,6 @@
     font-size: 2rem;
     margin-bottom: 1.5rem;
     color: var(--dark-color);
-    text-align: center;
-    padding: 1rem;
   }
   
   .form-group {
@@ -302,3 +301,6 @@
     color: var(--dark-color);
   }
   
+  .disabled{
+    margin-top: 8px;
+  }

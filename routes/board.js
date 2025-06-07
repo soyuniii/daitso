@@ -22,6 +22,7 @@ const upload = multer({ storage: storage });
 
 // 게시글 목록
 router.get('/', (req, res) => {
+    console.log('세션 username:', req.session.username);
     db.all(`
         SELECT * FROM posts ORDER BY 
         COALESCE(parent_id, id), id ASC
@@ -49,7 +50,7 @@ router.get('/new', (req, res) => {
 
 router.post('/new', upload.single('attachment'), (req, res) => {
     const { title, content, parent_id } = req.body;
-    const author = req.session.user?.username || '익명';
+    const author = req.session.username || '익명';
 
     db.run(
         'INSERT INTO posts (title, content, parent_id, author) VALUES (?, ?, ?, ?)',
@@ -95,13 +96,20 @@ router.get('/view/:id', (req, res) => {
         if (err || !post) return res.send('글 없음');
 
         db.all('SELECT * FROM files WHERE post_id = ?', [postId], (ferr, files) => {
-            res.render('detail', { post, files:[], isNotice: false });
+            res.render('detail', 
+                { 
+                post, 
+                isNotice: false,
+                session: req.session,
+                username: req.session.username || null,
+                files  });
         });
     });
 });
 
 router.get('/reply/:id', (req, res) => {
     const parentId = req.params.id;
+    const username = req.session.username || null;
     db.get("SELECT title FROM posts WHERE id = ?", [parentId], (err, row) => {
         if (err || !row) return res.send("원글 없음");
         res.render('post', { 
@@ -109,7 +117,7 @@ router.get('/reply/:id', (req, res) => {
             parentId, 
             parentTitle: row.title, 
             session: req.session,
-            user: req.session.username || null 
+            username
         });
     });
 });
@@ -130,9 +138,10 @@ router.post('/create', (req, res) => {
 
 // 수정 폼
 router.get('/edit/:id', (req, res) => {
+    const username = req.session.username;
     db.get('SELECT * FROM posts WHERE id = ?', [req.params.id], (err, post) => {
         if (err || !post) return res.send('글 없음');
-        res.render('post',{ post ,session: req.session})
+        res.render('post',{ post ,session: req.session, username})
     });
 });
 
@@ -153,21 +162,19 @@ router.post('/edit/:id', upload.single('attachment'), (req, res) => {
 // 삭제 - 본인이 작성한 글만 삭제 가능
 router.get('/delete/:id', (req, res) => {
     const postId = req.params.id;
-    const currentUser = req.session.user?.username;
+    const currentUser = req.session.username;
 
     db.get('SELECT * FROM posts WHERE id = ?', [postId], (err, post) => {
         if (err || !post) return res.send('글이 존재하지 않습니다.');
 
-        // 익명 글이면 admin만 삭제 가능
-        if (post.author === '익명') {
-            if (currentUser !== 'admin') {
-                return res.send('익명 글은 admin만 삭제할 수 있습니다.');
-            }
+        const isAnon = post.author === '익명';
+        const isAdmin = currentUser === 'admin';
+        const isAuthor = currentUser && (currentUser.trim() === post.author.trim());
+
+        if (isAnon) {
+            if (!isAdmin) return res.send('익명 글은 admin만 삭제할 수 있습니다.');
         } else {
-            // 본인이 쓴 글만 삭제 가능
-            if (currentUser !== post.author) {
-                return res.send('본인이 작성한 글만 삭제할 수 있습니다.');
-            }
+            if (!isAuthor) return res.send('본인이 작성한 글만 삭제할 수 있습니다.');
         }
 
         db.run('DELETE FROM posts WHERE id = ?', [postId], (err) => {

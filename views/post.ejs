@@ -13,7 +13,7 @@
       
       <form action="<%= post ? '/board/edit/' + post.id : (parentId ? '/board/create' : '/board/new') %>"  method="post">
         <input type="hidden" name="parent_id" value="<%= post ? post.parent_id : parentId %>">
-        <input type="hidden" name="author" value="<%= session?.user?.username || '익명' %>">
+        <input type="hidden" name="author" value="<%= username || '익명' %>">
 
         
         <div class="form-group">

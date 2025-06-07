@@ -12,10 +12,8 @@
       <h2 class="form-title"><%= post.title %></h2>
         <div class="form-group">
           <p><%= post.content %></p>
-          <p>| 작성일: <%= post.created_at %></p>
-          <% if (!isNotice) { %>
-            <p>| 작성자: <%= post.author %></p>
-          <% } %>
+          <p>작성일: <%= post.created_at %></p>
+          <p>작성자: <%= post.author %></p>
         </div>
         <% if (post.file_path) { %>
           <span class="file-flag">📎 첨부파일</span>
@@ -23,16 +21,42 @@
             <%= post.file_path.split('/').pop() %>
           </a>
         <% } %>
+
+        <%
+      const isAuthor = username === post.author;
+      const isAdmin = username === 'admin';
+      const isAnon = post.author === '익명';
+         %>
    
         <div class="form-actions">
           <% if (!isNotice) { %>
             <a href="/board/reply/<%= post.id %>">답글</a>
-            <a href="/board/edit/<%= post.id %>">수정</a>
-            <a href="/board/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+
+            <% if (isAuthor) { %>
+              <a href="/board/edit/<%= post.id %>">수정</a>
+            <% } else { %>
+              <span class="disabled">수정</span>
+            <% } %>
+
+            <% if (isAuthor || (isAnon && isAdmin)) { %>
+              <a href="/board/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+            <% } else { %>
+              <span class="disabled">삭제</span>
+            <% } %>    
             <a href="/board">목록으로</a>
+
           <% } else { %>
-            <a href="/notice/edit/<%= post.id %>">수정</a>
-            <a href="/notice/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+            <% if (isAuthor) { %>
+              <a href="/board/edit/<%= post.id %>">수정</a>
+            <% } else { %>
+              <span class="disabled">수정</span>
+            <% } %>
+
+            <% if (isAuthor || (isAnon && isAdmin)) { %>
+              <a href="/board/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+            <% } else { %>
+              <span class="disabled">삭제</span>
+            <% } %>    
             <a href="/notice">목록으로</a>
           <% } %>
         </div>
