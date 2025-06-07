@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 확인</title>
+    <link rel="stylesheet" href="/stylesheets/cart.css">
+</head>
+<body>
+    <div class="cart-container">
+        <h2 style="text-align: center;">주문 확인</h2>
+
+        <% if (typeof error !== 'undefined') { %>
+            <p style="color: red; font-weight: bold;"><%= error %></p>
+        <% } else { %>
+            <p class="empty-message"><%= userName %>님, 주문이 정상적으로 접수되었습니다.</p>
+            <p class="empty-message">감사합니다!</p>
+        <% } %>
+
+        <p>
+            <a href="/" class="btn btn-shopping">홈으로 돌아가기</a>
+        </p>
+    </div>
+</body>
+</html>

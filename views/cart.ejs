@@ -44,7 +44,9 @@
               <span>총 결제 금액</span>
               <span><%= (totalPrice + shippingFee).toLocaleString() %>원</span>
             </div>
-            <button class="btn btn-order">주문하기</button>
+            <form action="/order/confirm" method="POST">
+              <button type="submit" class="btn btn-order">주문하기</button>
+            </form>
           </div>
         <% } else { %>
           <p class="empty-message">장바구니에 담긴 상품이 없습니다.</p>
@@ -119,10 +121,10 @@
           });
         });
       
-        // 주문하기
-        document.querySelector('.btn-order')?.addEventListener('click', () => {
-          alert('주문/배송 정보 입력 페이지로 이동합니다');
-        });
+        // // 주문하기
+        // document.querySelector('.btn-order')?.addEventListener('click', () => {
+        //   alert('주문/배송 정보 입력 페이지로 이동합니다');
+        // });
       </script>
 </body>
 </html>

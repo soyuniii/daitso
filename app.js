@@ -13,6 +13,7 @@ const productsRouter = require('./routes/products');
 const cartRouter = require('./routes/cart');
 const noticeRouter = require('./routes/notice');
 const devRouter = require('./routes/dev');
+const orderRouter = require('./routes/order');
 
 var app = express();
 
@@ -28,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'secret-key',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
 }));
 
 app.use('/', indexRouter);
@@ -39,6 +40,7 @@ app.use('/products', productsRouter);
 app.use('/cart', cartRouter);
 app.use('/notice', noticeRouter);
 app.use('/dev', devRouter);
+app.use('/order', orderRouter);
 
 
 app.get('/login', (req,res)=> {
