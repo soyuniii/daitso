@@ -209,7 +209,12 @@
   .btn-secondary:hover {
     background-color: #e0e0e0;
   }
-  
+  .disabled {
+    color: #ccc;
+    opacity: 1;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
   .back-link {
     display: inline-block;
     margin-top: 1.5rem;

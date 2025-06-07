@@ -119,6 +119,7 @@ router.post('/login', async (req, res) => {
             if (match) {
                 req.session.userId = user.id;
                 req.session.name = user.name;
+                req.session.username = user.username;
                 return res.render('login', {
                     message: '로그인 성공! 홈으로 이동합니다.',
                     messageType: 'success'
