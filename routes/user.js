@@ -120,7 +120,7 @@ router.post('/login', async (req, res) => {
                 req.session.userId = user.id;
                 req.session.name = user.name;
                 return res.render('login', {
-                    message: '로그인 성공! 잠시 후 홈으로 이동합니다.',
+                    message: '로그인 성공! 홈으로 이동합니다.',
                     messageType: 'success'
                 });
             } else {

@@ -240,15 +240,19 @@ nav a:hover::after {
   color: white;
 }
 .btn-back {
-  display: inline-flex;
+  display: block;
+  width: 290px;
   align-items: center;
-  gap: 0.5rem;
-  color: #3a56d4;
+  gap: 3rem;
   text-decoration: none;
   font-weight: 600;
-  font-size: large;
-  padding: 20px;
+  font-size: 20px;
+  padding: 15px;
   transition: var(--transition);
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
 }
 
 .categories {
