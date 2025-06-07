@@ -144,9 +144,11 @@
   }
   
   .form-title {
-    font-size: 1.5rem;
+    font-size: 2rem;
     margin-bottom: 1.5rem;
     color: var(--dark-color);
+    text-align: center;
+    padding: 1rem;
   }
   
   .form-group {

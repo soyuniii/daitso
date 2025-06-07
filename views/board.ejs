@@ -45,19 +45,17 @@
               <% } %>
             </div>
             <div class="post-actions">
-              (
+
                 <% if (isAuthor) { %>
                   <a href="/board/edit/<%= post.id %>">수정</a>
                 <% } else { %>
                   <span class="disabled">수정</span>
                 <% } %>
-                /
                 <% if ((isAuthor) || (isAnon && isAdmin)) { %>
                   <a href="/board/delete/<%= post.id %>" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
                 <% } else { %>
                   <span class="disabled">삭제</span>
                 <% } %>
-              )
             </div>
           </li>
         <% }) %>

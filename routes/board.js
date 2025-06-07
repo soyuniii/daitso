@@ -40,7 +40,7 @@ router.get('/new', (req, res) => {
         parentId: null ,
         parentTitle: null, 
         session: req.session, 
-        user: req.session.username || null
+        username: req.session.username || null
     });
 });
 
